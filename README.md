@@ -1,6 +1,6 @@
 # ZK-Friendly Elastic Anonymous Group for Semaphore and More 
 
-We present EAG (ZK-Friendly Elastic Anonymous Group) based on a novel data structure - Merkle Forest. EAG can scale semaphore group to billions of users without increasing the proving time and the proving key size. EAG's core idea is the seperation of group size and anonymity guarantee. With EAG, semaphore protocl could achieve:
+We present EAG (ZK-Friendly Elastic Anonymous Group) based on a novel data structure - Merkle Forest. EAG can scale semaphore group to billions of users without increasing the proving time and the proving key size. EAG's core idea is the seperation of group size and anonymity guarantee. With EAG, semaphore protocol could achieve:
 1. Elastic (possibly unlimited) group size without increasing proving key size and prover time.
 2. Elastic anonymity guarantee that allows the client to make the prover time / anonymity guarantee trade-off.
 
@@ -43,15 +43,15 @@ We define elastic anonymous groups (EAG) with $G(g)$, where $g$ is the depth of 
 ![Figure 1](./docs/split.png)
 
 With the new elastic group design. the original huge [Merkle tree membership circuit](https://github.com/semaphore-protocol/semaphore/blob/main/packages/circuits/tree.circom) can be reduced to
-* a smaller Merkle tree membership circuit, which out=puts a root
+* a smaller Merkle tree membership circuit, which outputs a root
 * find the output root in a look-up table
 
 ### Elastic Anonymity Guarantee
 
-this actually provide "elastic gurantee", suppose the follow cases:
-1. user provide the "treeId" of elastic group, and merkle proof of that tree, get a minium grantee.
+this actually provide "elastic gurantee", suppose the following cases:
+1. user provide the "treeId" of elastic group, and merkle proof of that tree, get a minimum guarantee.
 2. user join a tree which have less leaves, which means it might loss privacy, then user could "merge" its original tree and another full-size tree to be a new tree, and provide membership in the new tree. As an example in Figure 2, if member 4 want to prove membership with anonymity grantee 2, then it can merge serveal trees to make the total members is more than 2**2 in new tree, here merge tree 2 and 3, and provide the merkle proof of new tree.  
-3. user might want higher anonymity gurantee, by "merge" all the trees. user decide the gurantee they want. Figure 2 given an example of merge 4 trees in group.
+3. user might want higher anonymity gurantee, by "merge" all the trees. user decides the guarantee they want. Figure 2 given an example of merge 4 trees in group.
 
 ```mermaid
     flowchart TD;
@@ -104,7 +104,7 @@ The "merge" demands varies between different user case, suppose two kinds of pri
 1. privacy vote only after all user have joined and group freezed.
 2. privacy vote happens simultanously as new member join the group.
 
-In the 2nd user case, concurrency competion could happen. for example, when user A vote and user B join the same group at the same time, and the join 1st complete modify merkle tree on-chain, while vote still using old merkle path, result in on-chain verify fail. It could possible be resolved by centralized cordinator, like relayer, in some specific user cases， but not all user case. A native methology is required for reduce concurency competion.
+In the 2nd user case, concurrency competion could happen. for example, when user A vote and user B join the same group at the same time, and the join 1st complete modify merkle tree on-chain, while vote still using old merkle path, result in on-chain verify fail. It could possible be resolved by centralized cordinator, like relayer, in some specific user cases， but not all user case. A native methology is required for reduce concurrency competition.
 
 So here, we proposal a hash-based random-member-join strategy, that is, select a random group to join, in this way, simulatanously prove and join activity will most probably operate on different group, thus almost avoid concurrency competition. Figure 3 show an example of random-memeber-join merkle forest.
 
